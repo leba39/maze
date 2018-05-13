@@ -31,6 +31,7 @@ struct locationstack
     struct locationstacknode *top;
 };
 
+struct locationstack* locationstack_create();   //olvidada por matoro
 void locationstack_push(struct locationstack *stack, struct location loc);
 void locationstack_pop(struct locationstack *stack);
 const struct location locationstack_get_top(struct locationstack stack);

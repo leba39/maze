@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /*
 This file represents the "location" struct.
@@ -68,5 +69,6 @@ struct location* loc_neighbor(struct location *loc);
 bool loc_isdone(struct location loc);
 bool loc_isequal(struct location loc1, struct location loc2);
 void loc_destroy(struct location *loc);
+void loc_print(struct location *loc);
 
 #endif
