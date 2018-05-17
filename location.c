@@ -76,5 +76,5 @@ void loc_destroy(struct location *loc){
 void loc_print(struct location *loc){
     //function added for testing purposes by leba.
     if(!loc)    return;
-    fprintf(stdout,"Location. Fila: %d\tColumna: %d\tEstado: %d\n",loc->row,loc->col,loc->next_direction);
+    fprintf(stdout,"Fila: %d\tColumna: %d\tEstado: %d\n",loc->row,loc->col,loc->next_direction);
 }

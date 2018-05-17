@@ -13,8 +13,8 @@ int main(){
     while(!loc_isdone(*initial_location)){
         struct location* neighbor = loc_neighbor(initial_location);
         loc_print(neighbor);
-        free(neighbor);
+        loc_destroy(neighbor);
     }
-    free(initial_location);
+    loc_destroy(initial_location);
     return 0;
 }

@@ -2,7 +2,8 @@
 #define STACK_H_INCLUDED
 
 #include <stdbool.h>
-#include "location.h"
+#include <assert.h>
+#include "location.h"   //already contains stdlib
 
 //predeclaration
 struct locationstacknode;
