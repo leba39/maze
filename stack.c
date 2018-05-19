@@ -6,15 +6,11 @@ Add your implementation of the functions in "stack.h" here.
 
 //LOCATION STACK
 
-struct locationstack* locationstack_create(){
+struct locationstack* locationstack_create(struct location init_loc){
     
-    //Initial Location-Entry for the maze is always 0,0. Otherwise we would need more args.
-    struct location* init_loc            = loc_create(0,0);  
-
-    struct locationstacknode* init_node  = locationstacknode_create(*init_loc,NULL);
+    struct locationstacknode* init_node  = locationstacknode_create(init_loc,NULL);
     struct locationstack* init_stack     = (struct locationstack*)malloc(sizeof(struct locationstack));
     init_stack->top = init_node;
-    loc_destroy(init_loc);
     
     return init_stack;
 }

@@ -2,7 +2,10 @@
 
 int main(){
 
-    struct locationstack *first = locationstack_create();
+
+    struct location* init_loc = loc_create(0,0);
+    struct locationstack *first = locationstack_create(*init_loc);
+    loc_destroy(init_loc);
 
 
     locationstack_print(*first);

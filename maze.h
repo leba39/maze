@@ -2,7 +2,7 @@
 #define MAZE_H_INCLUDED
 
 #include <stdbool.h>
-#include "location.h"
+#include "location.h"   //already has stdlib
 
 /*
 This file represents the "maze" struct.

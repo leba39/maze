@@ -7,17 +7,18 @@
 int main(){
 
     //VARs
-    struct location *loc_one_zero,*loc_one_one,*loc_one_two,*loc_two_two;
+    struct location *init_loc,*loc_one_zero,*loc_one_one,*loc_one_two,*loc_two_two;
     struct locationstack* my_first_stack;
 
     //DEF    
 
+    init_loc     = loc_create(0,0);
     loc_one_zero = loc_create(1,0);
     loc_one_one  = loc_create(1,1);
     loc_one_two  = loc_create(1,2);
     loc_two_two  = loc_create(2,2);
 
-    my_first_stack = locationstack_create();
+    my_first_stack = locationstack_create(*init_loc);
 
     //TESTs 
 
@@ -38,6 +39,7 @@ int main(){
     loc_destroy(loc_one_one);
     loc_destroy(loc_one_two);
     loc_destroy(loc_two_two);
+    loc_destroy(init_loc);
 
     //GET_TOP AND PRINTS
     struct location new_top = locationstack_get_top(*my_first_stack);
