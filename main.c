@@ -31,15 +31,17 @@ int read_file(FILE* fp, struct location* loc_arr,struct location* loc_start, str
 int main(int argc, char* argv[]){
 
     //VARs
-    FILE* input_file;
+    FILE* input_file = NULL;
     char* input_filename;
-    bool tried = false;
+    bool tried      = false;
+    bool end        = false;
+    bool backtrace;
     int maze_no_locs;
     struct location* maze_locs;
-    struct location maze_start, maze_end;
+    struct location maze_start, maze_end, loc_top, loc_next;
     struct maze* maze;    
+    struct locationstack* loc_stack;
 
-    
     //Open file
     do{
         if(argc<2||tried){
@@ -61,18 +63,72 @@ int main(int argc, char* argv[]){
 
     //MAZE SOLVING:
 
-    maze = maze_create(maze_locs,maze_no_locs,maze_start,maze_end);
+    maze        = maze_create(maze_locs,maze_no_locs,maze_start,maze_end);
+    loc_stack   = locationstack_create(maze_get_start(*maze));    
+    loc_top     = locationstack_get_top(*loc_stack);           // == maze_start
 
-    
+    while(!locationstack_is_empty(*loc_stack)){
+        /*  Priorities: 
+         *  Check all neighbors, if it isnt on the stack, go there.
+         *  If the location is done and no new valid position is available for pushing it into the stack then pop current top (backtrace). 
+         *  If we found the end of maze break and print stack. If the maze has no exit, all locs become DONE and stack become EMPTY.
+         *  Print result.
+         *  (Save current node.loc.next_dir state with a pop and push) -> could be fixed with stack.h returning location*
+         */
+        backtrace = true;        
+
+        locationstack_pop(loc_stack);
+
+        loc_start(&loc_top);        
+        while(!loc_isdone(loc_top)){
+            struct location* loc_nav = loc_neighbor(&loc_top);
+            if(maze_is_valid(*maze,*loc_nav)){
+                if(!locationstack_is_on(*loc_stack,*loc_nav)){
+                    loc_next  = *loc_nav;
+                    backtrace = false;
+                    break;    
+                }
+            }        
+            loc_destroy(loc_nav);   
+        }
         
+        locationstack_push(loc_stack,loc_top);        
 
+        if(!backtrace){
+            locationstack_push(loc_stack,loc_next);
+        }else{
+            locationstack_pop(loc_stack);
+        }
 
+        //debug
+        locationstack_print(*loc_stack);
+
+        loc_top = locationstack_get_top(*loc_stack);
+        if(maze_is_end(*maze,loc_top)){
+            end = true;
+            break;
+        }
+    }
+
+    if(end){
+        fprintf(stdout,"Exit found! Maze completed!\n");
+        locationstack_print(*loc_stack);
+    }else{
+        fprintf(stdout,"This maze has no possible exit!\n");
+    }
+
+    //DESTROY
+    locationstack_destroy(loc_stack);
+    maze_destroy(maze);
+    
     return 0;
 }
 
 FILE* open_file(char* filename){
 
     FILE* fp;
+    if(!filename)   return NULL;
+
     fp = fopen(filename,"r");
     if(!fp){
         fprintf(stderr,"Error, couldnt open file. Error num:\t%d\n",errno);

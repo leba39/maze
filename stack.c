@@ -101,7 +101,7 @@ struct locationstacknode* locationstacknode_create(const struct location loc, st
     
     struct locationstacknode* new  = (struct locationstacknode*)malloc(sizeof(struct locationstacknode));
     new->loc    = loc;
-    new->next   = next;
+    new->next   = next; //puedo hacer un locationstacknode_set_next
     return new;
 }
 
