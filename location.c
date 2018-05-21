@@ -20,7 +20,7 @@ struct location* loc_create(int row, int col){
 void loc_start(struct location *loc){
     
     if(!loc)    return;
-    loc->next_direction = RIGHT;
+    if(loc->next_direction==100)    loc->next_direction = RIGHT;    //fresh created location is initialized
 }
 
 struct location* loc_neighbor(struct location *loc){
@@ -30,7 +30,7 @@ struct location* loc_neighbor(struct location *loc){
     struct location*  copy = (struct location*)malloc(sizeof(struct location));
     copy->row = loc->row;
     copy->col = loc->col;
-    copy->next_direction = loc->next_direction;
+    copy->next_direction = 100;
     //modify it so it matches next location in sequence
     switch(loc->next_direction){
         //make sure row and col dont go out of bounds? do we do it from another .c?

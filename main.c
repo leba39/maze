@@ -35,7 +35,6 @@ int main(int argc, char* argv[]){
     char* input_filename;
     bool tried      = false;
     bool end        = false;
-    bool backtrace;
     int maze_no_locs;
     struct location* maze_locs;
     struct location maze_start, maze_end, loc_top, loc_next;
@@ -75,29 +74,25 @@ int main(int argc, char* argv[]){
          *  Print result.
          *  (Save current node.loc.next_dir state with a pop and push) -> could be fixed with stack.h returning location*
          */
-        backtrace = true;        
 
         locationstack_pop(loc_stack);
 
         loc_start(&loc_top);        
         while(!loc_isdone(loc_top)){
+            
             struct location* loc_nav = loc_neighbor(&loc_top);
-            if(maze_is_valid(*maze,*loc_nav)){
-                if(!locationstack_is_on(*loc_stack,*loc_nav)){
-                    loc_next  = *loc_nav;
-                    backtrace = false;
-                    break;    
-                }
+            if(maze_is_valid(*maze,*loc_nav)&&!locationstack_is_on(*loc_stack,*loc_nav)){
+                loc_next  = *loc_nav;
+                loc_destroy(loc_nav);
+                break;    
+                
             }        
             loc_destroy(loc_nav);   
         }
         
-        locationstack_push(loc_stack,loc_top);        
-
-        if(!backtrace){
-            locationstack_push(loc_stack,loc_next);
-        }else{
-            locationstack_pop(loc_stack);
+        if(!loc_isdone(loc_top)){
+            locationstack_push(loc_stack,loc_top);
+            locationstack_push(loc_stack,loc_next);        
         }
 
         //debug
