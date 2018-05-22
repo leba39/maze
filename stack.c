@@ -85,12 +85,19 @@ void locationstack_print(struct locationstack stack){
 }
 
 void locationstack_destroy(struct locationstack *stack){
-    
-    if(locationstack_is_empty(*stack)){
-        free(stack);
-        stack = NULL;
+
+    if(!stack)  return;
+
+//  Free all current nodes in stack
+
+    if(!locationstack_is_empty(*stack)){
+        do{
+            locationstack_pop(stack);
+        }while(!locationstack_is_empty(*stack));
     }
 
+    free(stack);
+    stack = NULL;
     return;
 }
 
